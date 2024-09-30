@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multiple File Upload</title>
+  <script src="ddupload.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .drop-zone {
+      padding: 80px 40px;
+      border: 2px dashed #007bff;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .drop-zone.dragover {
+      background-color: #eaf4ff;
+    }
+
+    .drop-zone img {
+      max-width: 100px;
+      margin: 20px 0;
+    }
+
+    .drop-zone p {
+      margin: 0;
+      font-weight: bold;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .file-info {
+      margin-top: 20px;
+    }
+
+    .file-info label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    .message {
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #6c757d;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h2>Multiple File Upload</h2>
+    <!-- Submit Button -->
+    <form action="upload.php" method="POST" enctype="multipart/form-data">
+      <!-- First File Upload Area -->
+      <div id="upload-container-1" class="drop-zone">Drag and drop a file here or click to select a file.</div>
+      <div class="file-info">
+        <label for="file-name-1">Edit File Name:</label>
+        <input type="text" id="file-name-1" name="file_name_1" placeholder="Enter new file name">
+      </div>
+
+      <!-- Second File Upload Area -->
+      <div id="upload-container-2" class="drop-zone">Drag and drop a file here or click to select a file.</div>
+      <div class="file-info">
+        <label for="file-name-2">Edit File Name:</label>
+        <input type="text" id="file-name-2" name="file_name_2" placeholder="Enter new file name">
+      </div>
+      <button type="submit">Submit Files</button>
+    </form>
+
+    <p class="message">Allowed file types: JPEG, PNG, GIF, PDF, DOC (Max 2MB).</p>
+  </div>
+
+  <script>
+    // Utility function to check file size
+    function checkFileSize(file, maxSize) {
+      if (file.size > maxSize) {
+        alert('File size exceeds the limit of 2MB.');
+        return false;
+      }
+      return true;
+    }
+
+    // Initialize DragDropUpload for the first upload container
+    new DragDropUpload('upload-container-1', {
+      allowCamera: true, // Enable camera on mobile devices
+      allowedFileTypes: ['image/jpeg', 'image/png', 'image/gif'], // Allowed file types for upload
+      maxFileSize: 2 * 1024 * 1024, // Max file size limit of 2MB
+      onChanged: (file) => {
+        if (checkFileSize(file, 2 * 1024 * 1024)) { // Check file size before processing
+          document.getElementById('file-name-1').value = file.name; // Display selected file name
+        }
+      }
+    });
+
+    // Initialize DragDropUpload for the second upload container
+    new DragDropUpload('upload-container-2', {
+      allowedFileTypes: ['*'], // Allow all file types for this container
+      maxFileSize: 2 * 1024 * 1024, // Max file size limit of 2MB
+      onChanged: (file) => {
+        if (checkFileSize(file, 2 * 1024 * 1024)) { // Check file size before processing
+          document.getElementById('file-name-2').value = file.name; // Display selected file name
+        }
+      }
+    });
+  </script>
+
+</body>
+
+</html>
